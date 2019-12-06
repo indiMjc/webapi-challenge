@@ -54,11 +54,9 @@ router.put("/:id", (req, res) => {
         })
         .catch(err => {
           console.log(err);
-          res
-            .status(500)
-            .json({
-              error: "Internal error while getting updated project action."
-            });
+          res.status(500).json({
+            error: "Internal error while getting updated project action."
+          });
         });
     })
     .catch(err => {
@@ -66,6 +64,29 @@ router.put("/:id", (req, res) => {
       res
         .status(500)
         .json({ error: "Internal error while updating project action." });
+    });
+});
+
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+  ActionsDb.get(id)
+    .then(action => {
+      ActionsDb.remove(id)
+        .then(() => {
+          res.status(200).json(action);
+        })
+        .catch(err => {
+          console.log(err);
+          res
+            .status(500)
+            .json({ error: "Internal error while deleting project action." });
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "Internal error while deleting project action." });
     });
 });
 
