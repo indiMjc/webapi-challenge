@@ -39,4 +39,34 @@ router.post("/:id", (req, res) => {
     });
 });
 
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const editedAction = {
+    project_id: req.params.id,
+    description: req.body.description,
+    notes: req.body.notes
+  };
+  ActionsDb.update(id, editedAction)
+    .then(() => {
+      ActionsDb.get(id)
+        .then(action => {
+          res.status(200).json(action);
+        })
+        .catch(err => {
+          console.log(err);
+          res
+            .status(500)
+            .json({
+              error: "Internal error while getting updated project action."
+            });
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      res
+        .status(500)
+        .json({ error: "Internal error while updating project action." });
+    });
+});
+
 module.exports = router;
