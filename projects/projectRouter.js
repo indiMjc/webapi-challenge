@@ -29,4 +29,16 @@ router.get("/:id", (req, res) => {
     });
 });
 
+router.post("/", (req, res) => {
+  const project = req.body;
+  ProjectDb.insert(project)
+    .then(project => {
+      res.status(201).json(project);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: "Internal error while saving project." });
+    });
+});
+
 module.exports = router;
